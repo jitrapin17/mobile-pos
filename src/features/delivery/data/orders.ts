@@ -1,0 +1,63 @@
+import { DeliveryOrder } from '../types';
+
+export const deliveryTabs = ['ทั้งหมด', 'รอยืนยัน', 'กำลังทำ', 'รอรับงาน', 'กำลังส่ง', 'สำเร็จ', 'ยกเลิก'];
+
+export const deliveryOrders: DeliveryOrder[] = [
+  {
+    id: '#1001',
+    date: '01-01-2026',
+    time: '12:30:00',
+    customerName: 'Nana',
+    itemCount: '5 รายการ',
+    paymentType: 'online',
+    amount: '฿1,800.00',
+    status: 'pending',
+    action: 'viewSlip',
+  },
+  {
+    id: '#1001',
+    date: '01-01-2026',
+    time: '12:30:00',
+    customerName: 'Takasan',
+    itemCount: '5 รายการ',
+    paymentType: 'cod',
+    amount: '฿1,800.00',
+    status: 'cooking',
+    action: 'selectRider',
+    progress: 1,
+  },
+  {
+    id: '#1001',
+    date: '01-01-2026',
+    time: '12:30:00',
+    customerName: 'Megumi',
+    itemCount: '5 รายการ',
+    paymentType: 'online',
+    amount: '฿1,800.00',
+    status: 'waitRider',
+    action: 'none',
+  },
+  {
+    id: 'N1277777 #1001',
+    date: '01-01-2026',
+    time: '12:30:00',
+    customerName: 'Yuta',
+    itemCount: '5 รายการ',
+    paymentType: 'online',
+    amount: '฿1,800.00',
+    status: 'rider',
+    action: 'completeDelivery',
+    progress: 2,
+  },
+  {
+    id: 'N1277777 #1001',
+    date: '01-01-2026',
+    time: '12:30:00',
+    customerName: 'Haha',
+    itemCount: '5 รายการ',
+    paymentType: 'online',
+    amount: '฿1,800.00',
+    status: 'success',
+    action: 'none',
+  },
+];
