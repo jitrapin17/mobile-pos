@@ -9,16 +9,17 @@ import { FigmaIcon } from './FigmaIcon';
 type OrderCardActionProps = {
   action: OrderAction;
   progress?: number;
+  onViewSlip?: () => void;
 };
 
-export function OrderCardAction({ action, progress = 0 }: OrderCardActionProps) {
+export function OrderCardAction({ action, progress = 0, onViewSlip }: OrderCardActionProps) {
   if (action === 'none') {
     return null;
   }
 
   if (action === 'viewSlip') {
     return (
-      <Pressable style={styles.outlineButton}>
+      <Pressable style={styles.outlineButton} onPress={onViewSlip}>
         <Text style={styles.outlineText}>ดูสลิป</Text>
         <FigmaIcon name="chevronOrange" size={20} />
       </Pressable>

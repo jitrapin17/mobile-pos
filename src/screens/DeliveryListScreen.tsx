@@ -19,9 +19,10 @@ const statusByTab: Partial<Record<string, DeliveryStatus>> = {
 
 type DeliveryListScreenProps = {
   onOrderPress: () => void;
+  onViewSlip?: () => void;
 };
 
-export function DeliveryListScreen({ onOrderPress }: DeliveryListScreenProps) {
+export function DeliveryListScreen({ onOrderPress, onViewSlip }: DeliveryListScreenProps) {
   const pagerRef = useRef<ScrollView>(null);
   const { width } = useWindowDimensions();
   const pageWidth = Math.min(width, 393);
@@ -110,6 +111,7 @@ export function DeliveryListScreen({ onOrderPress }: DeliveryListScreenProps) {
                     key={`${tab}-${order.customerName}-${index}`}
                     order={order}
                     onPress={order.status === 'pending' ? onOrderPress : undefined}
+                    onViewSlip={order.action === 'viewSlip' ? onViewSlip : undefined}
                   />
                 ))
               ) : (

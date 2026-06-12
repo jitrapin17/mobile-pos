@@ -6,72 +6,32 @@ export const fontFamily = {
 };
 
 export const typography = {
-  // Headline 2 — Noto Sans Thai Bold 20/30
-  h3: {
-    fontFamily: fontFamily.bold,
-    fontSize: 20,
-    lineHeight: 30,
-    fontWeight: '700' as const,
-  },
-  // Button 2 / label bold — Noto Sans Thai Bold 16/24 (used in components as bold label)
-  title: {
-    fontFamily: fontFamily.bold,
-    fontSize: 16,
-    lineHeight: 24,
-    fontWeight: '700' as const,
-  },
-  // Body 2 — Noto Sans Thai Regular 14/18
-  body: {
-    fontFamily: fontFamily.regular,
-    fontSize: 14,
-    lineHeight: 18,
-    fontWeight: '400' as const,
-  },
-  // Label 2 — Noto Sans Thai Medium 14/18
-  bodyMedium: {
-    fontFamily: fontFamily.medium,
-    fontSize: 14,
-    lineHeight: 18,
-    fontWeight: '500' as const,
-  },
-  // SemiBold 14/18
-  bodySemibold: {
-    fontFamily: fontFamily.semibold,
-    fontSize: 14,
-    lineHeight: 18,
-    fontWeight: '600' as const,
-  },
-  // Caption — Noto Sans Thai Regular 12/16
-  small: {
-    fontFamily: fontFamily.regular,
-    fontSize: 12,
-    lineHeight: 16,
-    fontWeight: '400' as const,
-  },
-  tiny: {
-    fontFamily: fontFamily.regular,
-    fontSize: 10,
-    lineHeight: 14,
-    fontWeight: '400' as const,
-  },
-  // Headline 1 — Noto Sans Thai Bold 24/30
-  h2: {
-    fontFamily: fontFamily.bold,
-    fontSize: 24,
-    lineHeight: 30,
-    fontWeight: '700' as const,
-  },
-  // Headline 3 — Noto Sans Thai Medium 18/22
-  h4: {
-    fontFamily: fontFamily.medium,
-    fontSize: 18,
-    lineHeight: 22,
-    fontWeight: '500' as const,
-  },
-  smallSemibold: {
-    fontFamily: fontFamily.semibold,
-    fontSize: 12,
-    lineHeight: 16,
-    fontWeight: '600' as const,
-  },
+  // Noto/Heading/H2 — Bold 24/32
+  h2: { fontFamily: fontFamily.bold, fontSize: 24, lineHeight: 32 },
+  // Noto/Heading/H3 — Bold 20/28
+  h3: { fontFamily: fontFamily.bold, fontSize: 20, lineHeight: 28 },
+  // Noto/Heading/H4 — Bold 18/24
+  h4: { fontFamily: fontFamily.bold, fontSize: 18, lineHeight: 24 },
+  // Button 2 — SemiBold 16/24
+  title: { fontFamily: fontFamily.semibold, fontSize: 16, lineHeight: 24 },
+  // Noto/Body/Large/Bold — Bold 16/24
+  bodyLargeBold: { fontFamily: fontFamily.bold, fontSize: 16, lineHeight: 24 },
+  // Label 1 — Medium 16/24
+  label1: { fontFamily: fontFamily.medium, fontSize: 16, lineHeight: 24 },
+  // Noto/Body/Large/Regular — Regular 16/24
+  body1: { fontFamily: fontFamily.regular, fontSize: 16, lineHeight: 24 },
+  // Noto/Body/Medium/Medium — Medium 14/20
+  bodyMedium: { fontFamily: fontFamily.medium, fontSize: 14, lineHeight: 20 },
+  // Noto/Body/Medium/Bold — Bold 14/20
+  bodyBold: { fontFamily: fontFamily.bold, fontSize: 14, lineHeight: 20 },
+  // SemiBold 14/20
+  bodySemibold: { fontFamily: fontFamily.semibold, fontSize: 14, lineHeight: 20 },
+  // Noto/Body/Medium/Regular — Regular 14/20
+  body: { fontFamily: fontFamily.regular, fontSize: 14, lineHeight: 20 },
+  // Noto/Body/Small/Regular — Regular 12/16
+  small: { fontFamily: fontFamily.regular, fontSize: 12, lineHeight: 16 },
+  // Noto/Button/Small — SemiBold 12/16
+  smallSemibold: { fontFamily: fontFamily.semibold, fontSize: 12, lineHeight: 16 },
+  // Tiny — Regular 10/14
+  tiny: { fontFamily: fontFamily.regular, fontSize: 10, lineHeight: 14 },
 };

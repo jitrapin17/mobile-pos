@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../../theme/colors';
+import { layout, radius, sizes, spacing } from '../../../theme/spacing';
 import { typography } from '../../../theme/typography';
 import { DeliveryOrder } from '../types';
 import { FigmaIcon } from './FigmaIcon';
@@ -10,9 +11,10 @@ import { PaymentInfo } from './PaymentInfo';
 type DeliveryOrderCardProps = {
   order: DeliveryOrder;
   onPress?: () => void;
+  onViewSlip?: () => void;
 };
 
-export function DeliveryOrderCard({ order, onPress }: DeliveryOrderCardProps) {
+export function DeliveryOrderCard({ order, onPress, onViewSlip }: DeliveryOrderCardProps) {
   return (
     <Pressable onPress={onPress} style={styles.card}>
       <View style={styles.cardHeader}>
@@ -41,18 +43,16 @@ export function DeliveryOrderCard({ order, onPress }: DeliveryOrderCardProps) {
         </View>
       </View>
 
-      <OrderCardAction action={order.action} progress={order.progress} />
+      <OrderCardAction action={order.action} progress={order.progress} onViewSlip={onViewSlip} />
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 16,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 16,
-    gap: 14,
+    borderRadius: radius.lg,
+    padding: layout.cardPadding,
+    gap: spacing.lg2,
     backgroundColor: colors.white,
     shadowColor: colors.shadow,
     shadowOffset: { width: 0, height: 2 },
@@ -62,25 +62,25 @@ const styles = StyleSheet.create({
   },
   cardHeader: {
     minHeight: 50,
-    paddingBottom: 12,
+    paddingBottom: spacing.lg,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 12,
+    gap: spacing.lg,
   },
   idBlock: {
     flex: 1,
-    gap: 2,
+    gap: spacing.xxs,
   },
   orderId: {
-    ...typography.title,
-    color: '#000000',
+    ...typography.bodyLargeBold,
+    color: colors.text,
   },
   metaRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: spacing.xs,
   },
   metaText: {
     ...typography.tiny,
@@ -91,11 +91,11 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
   settingBadge: {
-    width: 40,
-    height: 40,
+    width: sizes.actionButton,
+    height: sizes.actionButton,
     marginTop: -5,
     marginRight: -5,
-    borderRadius: 20,
+    borderRadius: spacing.xxl,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.white,
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   cardBody: {
-    gap: 6,
+    gap: spacing.sm,
   },
   customerRow: {
     minHeight: 20,
@@ -126,12 +126,12 @@ const styles = StyleSheet.create({
     minHeight: 24,
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 14,
+    gap: spacing.lg2,
   },
   amount: {
-    ...typography.title,
+    ...typography.body1,
     marginLeft: 'auto',
-    color: '#111111',
+    color: colors.text,
     textAlign: 'right',
   },
 });

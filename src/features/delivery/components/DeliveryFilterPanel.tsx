@@ -1,6 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../../theme/colors';
+import { radius, sizes, spacing } from '../../../theme/spacing';
 import { typography } from '../../../theme/typography';
 import { DeliveryStatusTabs } from './DeliveryStatusTabs';
 import { FigmaIcon } from './FigmaIcon';
@@ -37,12 +38,11 @@ export function DeliveryFilterPanel({ tabs, activeTab, onTabPress }: DeliveryFil
 
 const styles = StyleSheet.create({
   panel: {
-    marginHorizontal: 16,
-    marginTop: 0,
-    paddingHorizontal: 12,
-    paddingTop: 14,
-    paddingBottom: 18,
-    borderRadius: 32,
+    marginHorizontal: spacing.xl,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg2,
+    paddingBottom: spacing.xl2,
+    borderRadius: radius.card,
     shadowColor: '#FFF5CE',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
@@ -51,17 +51,17 @@ const styles = StyleSheet.create({
   searchRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    marginBottom: 10,
+    gap: spacing.md2,
+    marginBottom: spacing.md2,
   },
   searchInput: {
     flex: 1,
-    height: 40,
+    height: sizes.actionButton,
     borderRadius: 22,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 10,
+    gap: spacing.md,
+    paddingHorizontal: spacing.md2,
     backgroundColor: colors.white,
     shadowColor: colors.shadow,
     shadowOffset: { width: 0, height: 4 },
@@ -74,9 +74,9 @@ const styles = StyleSheet.create({
     color: '#B8C9EF',
   },
   iconButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: sizes.actionButton,
+    height: sizes.actionButton,
+    borderRadius: spacing.xxl,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.white,

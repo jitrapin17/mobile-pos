@@ -1,10 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+// LinearGradient used for background gradient only; buttons use Button component
 import { useState } from 'react';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
+import { Button } from '../components/ui/Button';
 import { CustomerInfoCard } from '../features/delivery/components/CustomerInfoCard';
+import { DetailDropdown } from '../features/delivery/components/DetailDropdown';
 import { FigmaIcon } from '../features/delivery/components/FigmaIcon';
 import { OrderDetailHeader } from '../features/delivery/components/OrderDetailHeader';
 import { OrderProgressSteps } from '../features/delivery/components/OrderProgressSteps';
@@ -37,10 +40,12 @@ const ORDER_ITEMS: OrderItem[] = [
 type OrderDetailPrepareScreenProps = {
   onBack: () => void;
   showApproveSnackbar?: boolean;
+  onViewSlip?: () => void;
 };
 
-export function OrderDetailPrepareScreen({ onBack, showApproveSnackbar = false }: OrderDetailPrepareScreenProps) {
+export function OrderDetailPrepareScreen({ onBack, showApproveSnackbar = false, onViewSlip }: OrderDetailPrepareScreenProps) {
   const [snackbarVisible, setSnackbarVisible] = useState(showApproveSnackbar);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
   return (
     <View style={styles.root}>
@@ -54,7 +59,7 @@ export function OrderDetailPrepareScreen({ onBack, showApproveSnackbar = false }
 
         <View style={styles.statusBarSpace} />
 
-        <OrderDetailHeader title="ออเดอร์ #1001" onBack={onBack} />
+        <OrderDetailHeader title="ออเดอร์ #1001" onBack={onBack} onMore={() => setDropdownVisible(true)} />
 
         <View style={styles.headerGap} />
 
@@ -63,19 +68,8 @@ export function OrderDetailPrepareScreen({ onBack, showApproveSnackbar = false }
           <OrderProgressSteps activeStep={0} stepTimes={['12:30:00']} />
 
           <View style={styles.actionRow}>
-            <Pressable style={styles.successBtn}>
-              <Text style={styles.successBtnText}>ออเดอร์สำเร็จ</Text>
-            </Pressable>
-            <LinearGradient
-              colors={['#FFA622', '#FF7B00']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-              style={styles.riderBtnGradient}
-            >
-              <Pressable style={styles.riderBtnPressable}>
-                <Text style={styles.riderBtnText}>เลือกคนส่ง</Text>
-              </Pressable>
-            </LinearGradient>
+            <Button variant="outline"   label="ออเดอร์สำเร็จ" />
+            <Button variant="gradient"  label="เลือกคนส่ง" flex />
           </View>
         </View>
 
@@ -92,6 +86,7 @@ export function OrderDetailPrepareScreen({ onBack, showApproveSnackbar = false }
               datetime="01-01-2026 12:30:00"
               paymentType="online"
               paymentStatus="paid"
+              onViewSlip={onViewSlip}
             />
 
             {/* Order list */}
@@ -137,13 +132,19 @@ export function OrderDetailPrepareScreen({ onBack, showApproveSnackbar = false }
           </ScrollView>
         </View>
 
-      </View>
+        {dropdownVisible && (
+          <DetailDropdown
+            onClose={() => setDropdownVisible(false)}
+            onCancelOrder={() => setDropdownVisible(false)}
+          />
+        )}
 
-      <Snackbar
-        visible={snackbarVisible}
-        message="ออเดอร์ส่งสำเร็จแล้ว"
-        onHide={() => setSnackbarVisible(false)}
-      />
+        <Snackbar
+          visible={snackbarVisible}
+          message="ออเดอร์ส่งสำเร็จแล้ว"
+          onHide={() => setSnackbarVisible(false)}
+        />
+      </View>
     </View>
   );
 }
@@ -174,34 +175,6 @@ const styles = StyleSheet.create({
   actionRow: {
     flexDirection: 'row',
     gap: 12,
-  },
-  successBtn: {
-    height: 48,
-    borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: colors.brand,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-  },
-  successBtnText: {
-    ...typography.title,
-    color: colors.brand,
-  },
-  riderBtnGradient: {
-    flex: 1,
-    height: 48,
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
-  riderBtnPressable: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  riderBtnText: {
-    ...typography.title,
-    color: colors.white,
   },
   card: {
     flex: 1,
@@ -236,7 +209,7 @@ const styles = StyleSheet.create({
   },
   orderTitle: {
     ...typography.h4,
-    color: '#000000',
+    color: colors.text,
   },
   orderCount: {
     ...typography.body,
@@ -259,11 +232,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   orderQty: {
-    ...typography.bodyMedium,
-    fontFamily: 'NotoSansThai_700Bold',
-    fontWeight: '700',
+    ...typography.bodyBold,
     color: colors.brand,
-    lineHeight: 20,
   },
   orderItemDetail: {
     flex: 1,
@@ -275,21 +245,17 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   orderItemName: {
-    ...typography.title,
+    ...typography.body1,
     flex: 1,
-    color: '#1A1B2D',
-    fontSize: 16,
-    lineHeight: 24,
+    color: colors.text,
   },
   orderItemPrice: {
-    ...typography.title,
-    color: '#111111',
-    fontSize: 16,
-    lineHeight: 24,
+    ...typography.bodyLargeBold,
+    color: colors.text,
   },
   orderItemOption: {
     ...typography.body,
-    color: '#9A9FA5',
+    color: colors.textMuted,
   },
   totalSection: {
     borderTopWidth: 1,
@@ -303,20 +269,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   deliveryLabel: {
-    ...typography.title,
-    fontWeight: '400',
-    fontFamily: 'NotoSansThai_400Regular',
-    color: '#1A1B2D',
-    fontSize: 16,
+    ...typography.body1,
+    color: colors.text,
   },
   deliveryAmount: {
     ...typography.h4,
-    color: '#111111',
+    color: colors.text,
   },
   grandTotalLabel: {
-    ...typography.title,
-    color: '#1A1B2D',
-    fontSize: 16,
+    ...typography.bodyLargeBold,
+    color: colors.text,
   },
   grandTotalAmount: {
     ...typography.h2,

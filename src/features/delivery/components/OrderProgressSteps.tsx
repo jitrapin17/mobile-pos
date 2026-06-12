@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../../theme/colors';
 import { typography } from '../../../theme/typography';
@@ -30,25 +31,21 @@ export function OrderProgressSteps({ activeStep = 0, stepTimes = [] }: OrderProg
           const isActive = index === activeStep;
           const isDone = index < activeStep;
           return (
-            <>
+            <Fragment key={index}>
               {index > 0 && (
-                <View
-                  key={`connector-${index}`}
-                  style={[styles.connector, (isActive || isDone) && styles.connectorActive]}
-                />
+                <View style={styles.connector} />
               )}
               <View
-                key={`step-${index}`}
                 style={[styles.circle, isActive && styles.circleActive]}
               >
                 <FigmaIcon
                   name={step.icon}
                   width={step.iconSize.width}
                   height={step.iconSize.height}
-                  color={isActive ? '#FFFFFF' : isDone ? colors.orange : '#C8CDD6'}
+                  color={isActive ? '#FFFFFF' : isDone ? colors.orange : colors.orangeLight}
                 />
               </View>
-            </>
+            </Fragment>
           );
         })}
       </View>
@@ -82,6 +79,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 24,
+    gap: 8,
   },
   circle: {
     width: 34,
@@ -97,9 +95,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 3,
     borderRadius: 99,
-    backgroundColor: 'rgba(255,255,255,0.4)',
-  },
-  connectorActive: {
     backgroundColor: colors.white,
   },
   labelRow: {

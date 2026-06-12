@@ -10,8 +10,9 @@ type CustomerInfoCardProps = {
   address: string;
   datetime: string;
   paymentType: PaymentType;
-  paymentStatus: 'pending' | 'paid';
+  paymentStatus: 'pending' | 'paid' | 'waitNewSlip';
   onCall?: () => void;
+  onViewSlip?: () => void;
 };
 
 export function CustomerInfoCard({
@@ -22,6 +23,7 @@ export function CustomerInfoCard({
   paymentType,
   paymentStatus,
   onCall,
+  onViewSlip,
 }: CustomerInfoCardProps) {
   const paymentLabel = paymentType === 'online' ? 'โอนเงิน' : 'เก็บปลายทาง';
 
@@ -49,7 +51,7 @@ export function CustomerInfoCard({
         <Text style={styles.infoText}>{paymentLabel}</Text>
         {paymentStatus === 'paid' ? (
           <>
-            <Pressable style={styles.slipBadge}>
+            <Pressable style={styles.slipBadge} onPress={onViewSlip}>
               <FigmaIcon name="visibility" size={12} />
               <Text style={styles.slipText}>ดูสลิป</Text>
             </Pressable>
@@ -58,6 +60,11 @@ export function CustomerInfoCard({
               <Text style={styles.paidText}>ชำระเงินแล้ว</Text>
             </View>
           </>
+        ) : paymentStatus === 'waitNewSlip' ? (
+          <View style={styles.waitNewSlipBadge}>
+            <FigmaIcon name="paymentArrowDown" size={10} />
+            <Text style={styles.pendingText}>รอสลิปใหม่</Text>
+          </View>
         ) : (
           <View style={styles.pendingBadge}>
             <FigmaIcon name="pending" size={10} />
@@ -122,6 +129,15 @@ const styles = StyleSheet.create({
   pendingText: {
     ...typography.smallSemibold,
     color: colors.yellow,
+  },
+  waitNewSlipBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+    backgroundColor: '#FFF7D4',
+    borderRadius: 10,
+    paddingHorizontal: 6,
+    paddingVertical: 4,
   },
   slipBadge: {
     flexDirection: 'row',

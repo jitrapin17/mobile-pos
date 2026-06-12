@@ -50,6 +50,7 @@ export const colors = {
   // --- Non-Figma: delivery app specific (from screen designs) ---
   orange: '#FFA622',
   orangeSoft: '#FFEEDF',
+  orangeLight: '#FFD99F',
   warningSoft: '#FFF7D4',
   yellow: '#F5B500',
   shadow: '#000000',

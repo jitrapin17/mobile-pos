@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { Animated, StyleSheet, Text, View } from 'react-native';
+import { Animated, Image, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Circle, Path } from 'react-native-svg';
 import { typography } from '../../theme/typography';
 
 type SnackbarProps = {
@@ -55,27 +54,20 @@ export function Snackbar({ visible, message, duration = 2500, onHide }: Snackbar
     <Animated.View style={[styles.wrap, { opacity, transform: [{ translateY }] }]}>
       <LinearGradient
         colors={['#FFFEE8', '#34B73A']}
+        locations={[0.06, 0.97]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.pill}
       >
         <View style={styles.content}>
+          <Image
+            source={require('../../../assets/snackbar-checkmark.png')}
+            style={styles.sticker}
+            resizeMode="contain"
+          />
           <Text style={styles.text}>{message}</Text>
         </View>
       </LinearGradient>
-      <View style={styles.sticker}>
-        <Svg width={35} height={35} viewBox="0 0 35 35">
-          <Circle cx={17.5} cy={17.5} r={17.5} fill="#04B400" />
-          <Path
-            d="M10 18l5.5 5.5L25 12"
-            stroke="white"
-            strokeWidth={2.8}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            fill="none"
-          />
-        </Svg>
-      </View>
     </Animated.View>
   );
 }
@@ -83,9 +75,9 @@ export function Snackbar({ visible, message, duration = 2500, onHide }: Snackbar
 const styles = StyleSheet.create({
   wrap: {
     position: 'absolute',
-    bottom: 32,
-    left: 16,
-    right: 16,
+    bottom: 24,
+    left: 18,
+    right: 18,
     zIndex: 999,
     shadowColor: '#002B8A',
     shadowOffset: { width: 0, height: 8 },

@@ -1,18 +1,28 @@
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useState } from 'react';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { CustomerInfoCard } from '../features/delivery/components/CustomerInfoCard';
+import { DetailDropdown } from '../features/delivery/components/DetailDropdown';
 import { FigmaIcon } from '../features/delivery/components/FigmaIcon';
 import { OrderDetailHeader } from '../features/delivery/components/OrderDetailHeader';
 
 type OrderDetailConfirmScreenProps = {
   onBack: () => void;
   onApprove?: () => void;
+  onReject?: (reason: string) => void;
+  onViewSlip?: () => void;
 };
 
-export function OrderDetailConfirmScreen({ onBack, onApprove }: OrderDetailConfirmScreenProps) {
+export function OrderDetailConfirmScreen({ onBack, onApprove, onReject, onViewSlip }: OrderDetailConfirmScreenProps) {
+  const [rejectModalVisible, setRejectModalVisible] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [rejectReason, setRejectReason] = useState('');
+  const [rejectError, setRejectError] = useState(false);
+  const [rejectInputFocused, setRejectInputFocused] = useState(false);
+
   return (
     <View style={styles.root}>
       <StatusBar style="dark" />
@@ -27,7 +37,7 @@ export function OrderDetailConfirmScreen({ onBack, onApprove }: OrderDetailConfi
         <View style={styles.statusBarSpace} />
 
         {/* Header */}
-        <OrderDetailHeader title="ออเดอร์ #1001" onBack={onBack} />
+        <OrderDetailHeader title="ออเดอร์ #1001" onBack={onBack} onMore={() => setDropdownVisible(true)} />
 
         <View style={styles.headerGap} />
 
@@ -60,7 +70,7 @@ export function OrderDetailConfirmScreen({ onBack, onApprove }: OrderDetailConfi
               <View style={styles.slipPlaceholder}>
                 <Text style={styles.slipPlaceholderText}>สลิปการโอนเงิน</Text>
               </View>
-              <Pressable style={styles.expandBtn} hitSlop={8}>
+              <Pressable style={styles.expandBtn} hitSlop={8} onPress={onViewSlip}>
                 <FigmaIcon name="expandContent" width={14} height={14} />
               </Pressable>
             </View>
@@ -73,7 +83,7 @@ export function OrderDetailConfirmScreen({ onBack, onApprove }: OrderDetailConfi
             กรุณาตรวจสอบยอดเงินชำระที่ได้รับ ก่อนกดการยืนยัน
           </Text>
           <View style={styles.bottomActions}>
-            <Pressable style={styles.rejectBtn}>
+            <Pressable style={styles.rejectBtn} onPress={() => setRejectModalVisible(true)}>
               <Text style={styles.rejectText}>ไม่อนุมัติ</Text>
             </Pressable>
             <LinearGradient
@@ -88,6 +98,102 @@ export function OrderDetailConfirmScreen({ onBack, onApprove }: OrderDetailConfi
             </LinearGradient>
           </View>
         </View>
+
+
+        {/* Dropdown */}
+        {dropdownVisible && (
+          <DetailDropdown
+            onClose={() => setDropdownVisible(false)}
+            onOrderSuccess={onApprove}
+            onCancelOrder={() => setDropdownVisible(false)}
+            disableOrderSuccess
+          />
+        )}
+
+        {/* Reject modal */}
+        <Modal
+          visible={rejectModalVisible}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setRejectModalVisible(false)}
+        >
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalSheet}>
+              {/* Close button */}
+              <Pressable
+                style={styles.closeBtn}
+                onPress={() => {
+                  setRejectModalVisible(false);
+                  setRejectReason('');
+                  setRejectError(false);
+                  setRejectInputFocused(false);
+                }}
+                hitSlop={8}
+              >
+                <Text style={styles.closeBtnText}>✕</Text>
+              </Pressable>
+
+              {/* Header */}
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>ไม่อนุมัติ</Text>
+                <Text style={styles.modalSubtitle}>เลขออเดอร์ #1001</Text>
+              </View>
+
+              {/* Input */}
+              <View style={styles.inputGroup}>
+                <Text style={styles.inputLabel}>เหตุผลในการไม่อนุมัติ</Text>
+                <TextInput
+                  style={[
+                    styles.textInput,
+                    rejectInputFocused && styles.textInputFocus,
+                    rejectError && styles.textInputError,
+                  ]}
+                  value={rejectReason}
+                  onChangeText={(val) => {
+                    setRejectReason(val);
+                    if (val.trim()) setRejectError(false);
+                  }}
+                  onFocus={() => setRejectInputFocused(true)}
+                  onBlur={() => setRejectInputFocused(false)}
+                  placeholder="รายละเอียด"
+                  placeholderTextColor="#E2E5EA"
+                  multiline
+                  scrollEnabled
+                />
+                {rejectError && (
+                  <Text style={styles.inputErrorText}>กรุณากรอกข้อมูล</Text>
+                )}
+              </View>
+
+              {/* Confirm button */}
+              <LinearGradient
+                colors={['#003EC7', '#0052FF']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.modalConfirmBtn}
+              >
+                <Pressable
+                  style={styles.modalConfirmPressable}
+                  onPress={() => {
+                    if (!rejectReason.trim()) {
+                      setRejectError(true);
+                      return;
+                    }
+                    setRejectModalVisible(false);
+                    onReject?.(rejectReason);
+                  }}
+                >
+                  <Text style={styles.modalConfirmText}>ตกลง</Text>
+                </Pressable>
+              </LinearGradient>
+            </View>
+          </View>
+          </KeyboardAvoidingView>
+        </Modal>
       </View>
     </View>
   );
@@ -215,6 +321,96 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   approveText: {
+    ...typography.title,
+    color: colors.white,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingBottom: 23,
+  },
+  modalSheet: {
+    width: 361,
+    backgroundColor: colors.white,
+    borderRadius: 18,
+    paddingTop: 20,
+    paddingHorizontal: 16,
+    paddingBottom: 24,
+    gap: 16,
+  },
+  closeBtn: {
+    position: 'absolute',
+    top: 16,
+    left: 16,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#CCD5E0',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  closeBtnText: {
+    fontSize: 12,
+    color: colors.text,
+    lineHeight: 14,
+  },
+  modalHeader: {
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 8,
+  },
+  modalTitle: {
+    ...typography.h3,
+    color: colors.text,
+  },
+  modalSubtitle: {
+    ...typography.body,
+    color: '#B0B5BD',
+  },
+  inputGroup: {
+    gap: 6,
+  },
+  inputLabel: {
+    ...typography.body,
+    color: colors.brand,
+  },
+  textInput: {
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1.5,
+    borderColor: '#DCE5F5',
+    borderRadius: 16,
+    paddingHorizontal: 17,
+    paddingVertical: 13,
+    ...typography.body1,
+    color: colors.text,
+    height: 80,
+    textAlignVertical: 'top',
+    outlineStyle: 'none',
+  } as any,
+  textInputFocus: {
+    backgroundColor: 'rgba(255,255,255,0.17)',
+    borderColor: colors.brand,
+  },
+  textInputError: {
+    borderColor: '#EF4444',
+  },
+  inputErrorText: {
+    ...typography.small,
+    color: '#FB3D13',
+  },
+  modalConfirmBtn: {
+    height: 48,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  modalConfirmPressable: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalConfirmText: {
     ...typography.title,
     color: colors.white,
   },
