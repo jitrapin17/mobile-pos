@@ -51,7 +51,7 @@ export function CustomerInfoCard({
         <Text style={styles.infoText}>{paymentLabel}</Text>
         {paymentStatus === 'paid' ? (
           <>
-            <Pressable style={styles.slipBadge} onPress={onViewSlip}>
+            <Pressable style={styles.slipBadge} onPress={onViewSlip} hitSlop={10}>
               <FigmaIcon name="visibility" size={12} />
               <Text style={styles.slipText}>ดูสลิป</Text>
             </Pressable>

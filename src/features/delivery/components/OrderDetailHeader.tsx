@@ -13,7 +13,7 @@ export function OrderDetailHeader({ title, onBack, onMore }: OrderDetailHeaderPr
   return (
     <View style={styles.header}>
       <Pressable style={styles.iconBtn} onPress={onBack} hitSlop={8}>
-        <FigmaIcon name="back" size={22} />
+        <FigmaIcon name="back" width={11} height={18} />
       </Pressable>
       <Text style={styles.title}>{title}</Text>
       <Pressable style={styles.moreBtn} hitSlop={8} onPress={onMore}>

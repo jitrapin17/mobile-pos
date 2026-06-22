@@ -68,10 +68,10 @@ export function FigmaIcon({ name, size = 20, width, height, color, ...props }: F
       );
     case 'back':
       return (
-        <Svg width={iconWidth} height={iconHeight} viewBox="0 0 22 22" fill="none" {...props}>
+        <Svg width={iconWidth} height={iconHeight} viewBox="0 0 11.115 18" fill="none" {...props}>
           <Path
-            d="M14.6667 20.1667L5.5 11L14.6667 1.83333L16.2938 3.46042L8.75417 11L16.2938 18.5396L14.6667 20.1667Z"
-            fill="#FFFFFF"
+            d="M11.115 2.115L9 0L0 9L9 18L11.115 15.885L4.245 9L11.115 2.115Z"
+            fill={color ?? '#005EEC'}
           />
         </Svg>
       );
