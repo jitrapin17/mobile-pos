@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-// LinearGradient used for background gradient only; buttons use Button component
+import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useState } from 'react';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
@@ -46,6 +45,7 @@ type OrderDetailPrepareScreenProps = {
 export function OrderDetailPrepareScreen({ onBack, showApproveSnackbar = false, onViewSlip }: OrderDetailPrepareScreenProps) {
   const [snackbarVisible, setSnackbarVisible] = useState(showApproveSnackbar);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [printDialogVisible, setPrintDialogVisible] = useState(false);
 
   return (
     <View style={styles.root}>
@@ -96,7 +96,7 @@ export function OrderDetailPrepareScreen({ onBack, showApproveSnackbar = false, 
                   <Text style={styles.orderTitle}>รายการออเดอร์</Text>
                   <Text style={styles.orderCount}>5 รายการ</Text>
                 </View>
-                <Pressable style={styles.receiptBtn} hitSlop={8}>
+                <Pressable style={styles.receiptBtn} hitSlop={8} onPress={() => setPrintDialogVisible(true)}>
                   <FigmaIcon name="receiptLong" size={20} />
                 </Pressable>
               </View>
@@ -144,6 +144,42 @@ export function OrderDetailPrepareScreen({ onBack, showApproveSnackbar = false, 
           message="ออเดอร์ส่งสำเร็จแล้ว"
           onHide={() => setSnackbarVisible(false)}
         />
+
+        {/* Print confirm dialog */}
+        <Modal
+          visible={printDialogVisible}
+          transparent
+          animationType="fade"
+          statusBarTranslucent
+          onRequestClose={() => setPrintDialogVisible(false)}
+        >
+          <Pressable style={styles.dialogOverlay} onPress={() => setPrintDialogVisible(false)}>
+            <Pressable style={styles.dialogCard} onPress={() => {}}>
+              <View style={styles.dialogContent}>
+                <View style={styles.dialogIconWrap}>
+                  <FigmaIcon name="receiptLong" width={24} height={27} color={colors.brand} />
+                </View>
+                <Text style={styles.dialogTitle}>ยืนยันพิมพ์ใบออเดอร์</Text>
+                <Text style={styles.dialogSubtitle}>ต้องการพิมพ์ใบออเดอร์อีกครั้ง</Text>
+              </View>
+              <View style={styles.dialogActions}>
+                <Pressable style={styles.dialogCancelBtn} onPress={() => setPrintDialogVisible(false)}>
+                  <Text style={styles.dialogCancelText}>ยกเลิก</Text>
+                </Pressable>
+                <LinearGradient
+                  colors={['#003EC7', '#0052FF']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.dialogConfirmBtn}
+                >
+                  <Pressable style={styles.dialogConfirmPressable} onPress={() => setPrintDialogVisible(false)}>
+                    <Text style={styles.dialogConfirmText}>ยืนยัน</Text>
+                  </Pressable>
+                </LinearGradient>
+              </View>
+            </Pressable>
+          </Pressable>
+        </Modal>
       </View>
     </View>
   );
@@ -283,5 +319,79 @@ const styles = StyleSheet.create({
   grandTotalAmount: {
     ...typography.h2,
     color: colors.brand,
+  },
+  dialogOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dialogCard: {
+    width: 320,
+    backgroundColor: colors.white,
+    borderRadius: 16,
+    padding: 18,
+    gap: 16,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  dialogContent: {
+    alignItems: 'center',
+    gap: 8,
+  },
+  dialogIconWrap: {
+    width: 48,
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dialogTitle: {
+    ...typography.h3,
+    color: '#141825',
+    textAlign: 'center',
+  },
+  dialogSubtitle: {
+    ...typography.body,
+    color: '#B0B5BD',
+    textAlign: 'center',
+  },
+  dialogActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  dialogCancelBtn: {
+    flex: 1,
+    height: 40,
+    backgroundColor: '#EBEDF1',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dialogCancelText: {
+    ...typography.bodySemibold,
+    color: '#141825',
+  },
+  dialogConfirmBtn: {
+    flex: 1,
+    height: 40,
+    borderRadius: 12,
+    shadowColor: 'rgba(0,62,199,1)',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 6,
+    overflow: 'hidden',
+  },
+  dialogConfirmPressable: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dialogConfirmText: {
+    ...typography.bodySemibold,
+    color: colors.white,
   },
 });
