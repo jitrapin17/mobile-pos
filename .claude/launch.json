@@ -3,10 +3,13 @@
   "configurations": [
     {
       "name": "expo-web",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["expo", "start", "--web"],
+      "runtimeExecutable": "/Users/jitrapin/.nvm/versions/node/v24.13.0/bin/node",
+      "runtimeArgs": ["/Users/jitrapin/.nvm/versions/node/v24.13.0/bin/npx", "expo", "start", "--web"],
       "port": 8081,
-      "autoPort": false
+      "autoPort": false,
+      "env": {
+        "PATH": "/Users/jitrapin/.nvm/versions/node/v24.13.0/bin:/usr/local/bin:/usr/bin:/bin"
+      }
     }
   ]
 }
