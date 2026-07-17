@@ -1,5 +1,7 @@
 # Figma → React Native
 
+> **Auto-trigger**: เมื่อ task มี `figma.com` URL ให้ execute command นี้ทันทีโดยไม่ต้องรอให้ user สั่ง
+
 ก่อนลงมือทุกครั้ง ต้องดึง Figma context ของ node/frame เป้าหมายก่อนเสมอ ห้ามเดาหรือแต่งค่าเอง
 
 ---
@@ -37,10 +39,17 @@ mcp__figma__get_design_context(fileKey, nodeId)
 - Render ด้วย `react-native-svg` (`<Svg>`, `<Path>`, `<LinearGradient>` ฯลฯ)
 - ห้ามใช้ PNG/JPG หรือ vector icon library แทน เว้นแต่ Figma source หาย → แจ้ง user
 
+### 6. Image Assets
+- URL จาก `figma.com/api/mcp/asset/...` หมดอายุใน 7 วัน — ห้ามใช้ URL ตรงในโค้ด
+- ให้ `curl` download มาเก็บใน `assets/` ก่อนเสมอ แล้วใช้ `require()` แทน
+- SVG asset → download แล้วอ่าน `<path>` data ออกมา render ผ่าน `react-native-svg`
+- PNG/JPG asset → download เก็บใน `assets/` แล้วใช้ `<Image source={require(...)} />`
+
 ---
 
 ## Asset Lookup Order (Icons/Images)
 
 1. ดึง SVG จาก Figma node โดยตรง
-2. ถ้าไม่มี → หา imageHash ใน Figma file (ทุก page)
-3. ถ้าไม่มีทั้งคู่ → แจ้ง user ห้าม generate เอง
+2. ถ้าไม่มี → ใช้ asset URL จาก `get_design_context` → download → ตรวจ non-transparent pixel ด้วย Python/PIL
+3. ถ้า PNG transparent (non-transparent = 0) → ใช้ `get_screenshot(nodeId, contentsOnly: true)` แทน เพราะ external sticker/image บาง node Figma ไม่มี pixel data จริง ต้อง render จาก canvas
+4. ถ้าไม่มีทั้งหมด → **หยุด** แจ้ง user ทันทีว่า "ไม่พบ asset จาก Figma — ต้องการ node URL เพิ่มเติมหรือให้ใช้ fallback ไหน" ห้าม generate หรือ invent asset เองเด็ดขาด
